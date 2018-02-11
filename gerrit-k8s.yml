@@ -12,8 +12,6 @@ spec:
     app: gerrit
   clusterIP: None
 ---
-# Headless Service required for tracking StatefulSet
-# TODO: Double check this is necessary
 apiVersion: v1
 kind: Service
 metadata:
@@ -162,11 +160,55 @@ spec:
         - name: tmp
           mountPath: /var/gerrit/tmp
         # Uncomment below to give an opportunity to exec into the containers
-        # and run a gerrit init.
+        # for activities such as a manual gerrit init.
         # command:
         # - "bash"
         # - "-c"
         # - "sleep 600"
+      initContainers:
+      - name: init
+        image: gerritcodereview/gerrit:latest
+        command:
+        - java
+        - -jar
+        - /var/gerrit/bin/gerrit.war
+        - init
+        - -b
+        - --no-auto-start
+        - -d
+        - /var/gerrit/
+        volumeMounts:
+        - name: cache
+          mountPath: /var/gerrit/cache
+        - name: index
+          mountPath: /var/gerrit/index
+        - name: git
+          mountPath: /var/gerrit/git
+        - name: etc
+          mountPath: /var/gerrit/etc
+        - name: tmp
+          mountPath: /var/gerrit/tmp
+      - name: reindex
+        image: gerritcodereview/gerrit:latest
+        command:
+        - java
+        - -jar
+        - /var/gerrit/bin/gerrit.war
+        - reindex
+        - --show-stack-trace
+        - -d
+        - /var/gerrit/
+        volumeMounts:
+        - name: cache
+          mountPath: /var/gerrit/cache
+        - name: index
+          mountPath: /var/gerrit/index
+        - name: git
+          mountPath: /var/gerrit/git
+        - name: etc
+          mountPath: /var/gerrit/etc
+        - name: tmp
+          mountPath: /var/gerrit/tmp
       volumes:
       - name: cache
         persistentVolumeClaim:
@@ -194,6 +236,7 @@ data:
       basePath = git
       serverId = 08bdfaeb-f1f9-402c-9496-1aedbbde3b8a
       canonicalWebUrl = http://localhost:32013/
+      ui = POLYGERRIT
     [database]
       type = POSTGRESQL
       hostname = database
