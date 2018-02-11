@@ -4,12 +4,10 @@
 
 ## Running
 
-You must first initialize the Gerrit volumes before this will work. Alternatively, you may copy the git, cache, index, and db directories from an existing Gerrit installation.
-
 ```
 kubectl apply -f gerrit-k8s.yml
 ```
 
 ## Configuring
 
-The Gerrit configuration files are embedded in `gerrit-k8s.yml`. 
+The Gerrit configuration files are embedded in `gerrit-k8s.yml`.

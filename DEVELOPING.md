@@ -1,6 +1,6 @@
 ### Initialize Gerrit
 
-Run the Gerrit image manually to initialize the Gerrit directories. Paths vary by machine.
+If needed, run the Gerrit image manually to initialize the Gerrit directories. Paths vary by machine.
 
 ```
 docker run -it \
