@@ -158,6 +158,7 @@ data:
   secure.config: |
     [auth]
       registerEmailPrivateKey = m9HMpzcaWiqEUw7U+qE8y4iTG01CU3CspfY=
+  # Replace with your own generated key pair. See: ssh-keygen
   ssh_host_rsa_key: |
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAuez8q38u3eInE7SkTeti6Fu88bkOUoPqhKq8z1K3J+gPgniS
